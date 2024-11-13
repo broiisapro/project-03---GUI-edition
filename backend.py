@@ -1,4 +1,3 @@
-# backend.py
 import os
 import json
 import csv
@@ -67,15 +66,24 @@ class BudgetTracker:
         csv_file = f'{self.username}_transactions.csv'
         with open(csv_file, 'w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Date', 'Category', 'Description', 'Amount'])
+            writer.writerow(['Date', 'Category', 'Description', 'Amount'])  # Write header
             for transaction in transactions:
+                # Convert each transaction to a dictionary and extract the relevant values
                 writer.writerow([transaction.date, transaction.category, transaction.description, transaction.amount])
         return csv_file
 
     def export_to_excel(self, transactions):
         """Export transactions to an Excel file."""
-        df = pd.DataFrame([t.to_dict() for t in transactions])
+        # Convert the transactions to a list of dictionaries (or use the Transaction's `to_dict()` method)
+        data = [transaction.to_dict() for transaction in transactions]
+        
+        # Create a DataFrame from the data
+        df = pd.DataFrame(data)
+        
+        # Define the Excel file name
         excel_file = f'{self.username}_transactions.xlsx'
+        
+        # Export the DataFrame to an Excel file
         df.to_excel(excel_file, index=False)
         return excel_file
 
@@ -114,4 +122,3 @@ class Transaction:
             'description': self.description,
             'date': self.date
         }
-
